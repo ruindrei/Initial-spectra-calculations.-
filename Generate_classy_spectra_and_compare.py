@@ -1,17 +1,11 @@
-## File for generating WDM transfer and pk output files for MP-Gadget sims. 
-## CLASS should automatically output a transfer file? The pk file I can make myself fairly easily.
-## Let's try a 10keV WDM species from k=1.05167e-05 to 1.10271 h/Mpc. 
+## File for generating transfer and pk output files for MP-Gadget sims. 
 
 import numpy as np
 from classy import Class
 import matplotlib.pyplot as plt
 import pandas as pd
 
-## Set up our k ranges we can actually go a bit larger than the given transfer file
-## Ranges of k really depend on the appropriate resolution scales we want to probe. 
-## Likely we will need to ask about this. This is something we need to build an intuition for. 
-kk = np.geomspace(1e-4,50,num=500) 
-
+## Parameter lists for different cosmologies, not all are used in comparison. 
 wdm_mass_eV = 10.0 * 1000
 params_WDM_10keV = { ## Set up a WDM universe for 10keV mass particle
     'output': 'dTk vTk mPk', ## Want both density and velocity transfer functions as well as power spectrum. 
@@ -50,6 +44,7 @@ params_mass_neutrinos = {
 
 }
 
+## For m_nu_tot = 0.06 eV
 params_mass_neutrinos_06 = {
     'output': 'dTk vTk mPk', ## Want both density and velocity transfer functions as well as power spectrum. 
     'N_ncdm':3,
@@ -66,6 +61,7 @@ params_mass_neutrinos_06 = {
 
 }
 
+## For m_nu_tot = 0.6 eV
 params_mass_neutrinos_6 = {
     'output': 'dTk vTk mPk', ## Want both density and velocity transfer functions as well as power spectrum. 
     'N_ncdm':3,
@@ -76,7 +72,7 @@ params_mass_neutrinos_6 = {
     'A_s':2.100549e-09,
     'omega_b':0.02238280,
     'T_cmb':2.7255,
-    'omega_m':0.1424903, # This will set the total mass density to the correct value. omega_b + omega_cdm + omega_ncdm
+    'omega_m':0.1424903, # This will set the total mass density to the correct value. omega_b + omega_cdm + omega_ncdm.
     'k_per_decade_for_pk': 50, ## Try setting this to 50 like Jimmy did. 
     'P_k_max_1/Mpc': 500  ## Try 200 for now
 
@@ -89,19 +85,19 @@ params_default = {
     'A_s':2.100549e-09,
     'omega_b':0.02238280,
     'T_cmb':2.7255,
-    'omega_cdm':0.1201075, # This will set the total mass density to the correct value
-    'k_per_decade_for_pk': 50, ## Try setting this to 50 like Jimmy did. 
-    'P_k_max_1/Mpc': 500  ## WARNING: MUST BE SET HIGHER THAN kk(1/Mpc)*h!!!
+    'omega_cdm':0.1201075, # This will set the mass density to the correct value
+    'k_per_decade_for_pk': 50, 
+    'P_k_max_1/Mpc': 500  ## WARNING: MUST BE SET HIGHER THAN kk(1/Mpc)*h
 }
 
 ## We care about redshift 99 as we want to forward model our power spectrum. 
-## However, we should also generate spectra at each specific snapshot for comparison to simulation outputs. 
+## Eventually, we should also generate spectra at each specific snapshot for comparison to simulation outputs. 
 ## We can do this later, let's just make sure we can run this for now. 
 
 
 ## Let's also plot the precomputed files as well:
 
-# Read the binary CLASS outputs we just generated (these files use k in [h/Mpc] and P in [Mpc/h]^3)
+# Read the binary CLASS outputs we generated (these files use k in [h/Mpc] and P in [Mpc/h]^3)
 Pk_mass_nu = pd.read_csv("class_mass_neutrinos_6_00_pk.dat", skiprows=3, delim_whitespace=True)
 Pk_def = pd.read_csv("class_default_00_pk.dat", skiprows=3, delim_whitespace=True)
 
@@ -152,6 +148,8 @@ Pk_nu_6 = nu_6.get_pk_all(kk, 0., nonlinear=False)
 # convert python-Class outputs to the same units as the binary files:
 #   k_plot = k (1/Mpc) * h_model -> [h/Mpc]
 #   P_plot = P_class (Mpc^3) / h_model^3 -> [Mpc/h]^3
+
+## The h's should be identical, we don't want to change anything with that.
 k_nu6_h = kk * h_nu_6
 P_nu6_h = Pk_nu_6 / (h_nu_6 ** 3)
 
@@ -175,6 +173,7 @@ plt.close()
 
 
 """
+## Plot to compare Pk ratios
 plt.xscale('log')
 plt.xlabel(r'$k \,\,\,\, [h/\mathrm{Mpc}]$')
 plt.ylabel(r'$P_{massive}(k)/P_{def}(k)$')
@@ -183,7 +182,10 @@ plt.plot(kk* h_def, Pk_nu_6/Pk_def, label = "0.6 eV")
 plt.legend()
 plt.show()
 """
+
+
 """
+## Plot transfer function Tk comparison.
 ## Read in the transfer function binary file.
 transfer_file_6 = pd.read_csv("class_mass_neutrinos_6_00_tk.dat", skiprows=10, delim_whitespace=True)
 transfer_file_default = pd.read_csv("class_def_00_tk.dat", skiprows=10, delim_whitespace=True)
@@ -208,7 +210,7 @@ plt.plot()
 plt.show()
 """
 
-## Always empy the struct to prevent memory leak
+## Empty the struct for no mem leak
 nu_06.struct_cleanup()
 nu_06.empty()
 
@@ -218,9 +220,3 @@ default.empty()
 nu_6.struct_cleanup()
 nu_6.empty()
 
-
-## Now let's attempt to run the output simulation, with the new base CLASS power spectra. 
-
-## Easier to just do a .ini file with the same parameters and run the binary. Use python classy wrapper for plotting only 
-
-## This WORKS WELL BUT IT IS VERY SLOW. Let's start running the .ini file at around 3:30 pm. 
