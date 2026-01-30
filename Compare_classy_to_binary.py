@@ -38,7 +38,7 @@ default.set(params_default)
 default.compute()
 
 
-k_bin = k_bin_h / h  ## convert to 1/Mpc for classy
+k_bin = k_bin_h * h  ## convert to 1/Mpc for classy
 ## Compute P(k) using classy
 ## We want to use the same k values as the binary output (some will be too large so just truncate)
 ## Let's just do it one value at a time instead of using get_pk_all.
@@ -60,6 +60,6 @@ plt.yscale('log')
 plt.xlabel(r'$k\ [h/\mathrm{Mpc}]$')
 plt.ylabel(r'$P(k)\ [\mathrm{Mpc}/h]^3$')
 plt.plot(k_bin_h, Pk_bin_h, color= "black", label= "CLASS Binary")
-plt.plot(k_bin_h, Pk_classy/h**3, linestyle='--', color= "gray", label= "Classy Wrapper") ## Convert units 
+plt.plot(k_bin_h, Pk_classy*h**3, linestyle='--', color= "gray", label= "Classy Wrapper") ## Convert units 
 plt.legend() 
 plt.show()
