@@ -1,0 +1,35 @@
+OutputDir = output # Directory for outputi
+FileBase = IC              # Base-filename of output files
+
+Ngrid = 256 # Size of cubic grid on which to create particles.
+
+BoxSize = 10000   # Periodic box size of simulation
+
+Omega0 = 0.30988304304      # Total matter density  (at z=0)
+OmegaLambda = 0.6900631940701698 # Cosmological constant (at z=0)
+OmegaBaryon = 0.04867734979     # Baryon density        (at z=0)
+ProduceGas = 1         # 1 = Produce gas  0 = no gas, just DM.
+RadiationOn = 1         #Enable background radiation
+HubbleParam = 0.6781      # Hubble parameter (may be used for power spec parameterization)
+
+
+Redshift = 99        # Starting redshift
+
+DifferentTransferFunctions = 1
+
+# filename of tabulated input spectrum in Mpc/h units
+FileWithInputSpectrum = default_p2018_pk.dat 
+FileWithTransferFunction = default_p2018_tk.dat
+
+PrimordialIndex = 0.9660499
+PrimordialAmp = 2.100549e-9
+Seed = 181170    #  seed for IC-generator
+
+# Massive neutrinos
+#MNue = 0.02
+#MNum = 0.02
+#MNut = 0.02
+
+UnitLength_in_cm = 3.085678e21   # defines length unit of output (in cm/h) 
+UnitMass_in_g = 1.989e43      # defines mass unit of output (in g/cm)
+UnitVelocity_in_cm_per_s = 1e5 # defines velocity unit of output (in cm/sec)

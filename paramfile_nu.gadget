@@ -1,0 +1,83 @@
+#  Relevant files
+
+InitCondFile = output/IC
+OutputDir = output
+TreeCoolFile = ../TREECOOL_fg20_eff_default.dat
+OutputList = "0.02,0.33333333"
+
+# CPU time -limit
+
+TimeLimitCPU = 43200 #= 12 hrs
+
+#  Characteristics of run
+TimeMax = 0.33333
+
+Omega0 = 0.30988304304      # Total matter density  (at z=0)
+OmegaLambda = 0.6900631403464087    # Cosmological constant (at z=0)
+OmegaBaryon = 0.04867734979     # Baryon density        (at z=0)
+Omega_ur = 5.372376107563105e-08 # You do need to set this to change N_ur for the CLASS output. CHECK THIS NUMBER!!!
+
+HubbleParam = 0.6781      # Hubble paramater (may be used for power spec parameterization)
+
+CoolingOn = 1
+StarformationOn = 1
+RadiationOn = 1
+HydroOn = 1
+DensityIndependentSphOn = 1 # Should be on?
+MetalReturnOn = 0 ## Set this to 0 for PRIYA.
+BlackHoleOn = 1 ## also on. Defaults okay
+WindOn = 1 ## Should be on! Defaults okay
+StarformationCriterion = density #,h2?
+MassiveNuLinRespOn = 1 # For neutrinos.
+UVFluctuationFile=HI_table_nu_p2018
+HIReionTemp=20000 # Can go to 15000 as well
+
+MetalCoolFile = ../cooling_metal_UVB
+
+SnapshotWithFOF = 1 # Don't know if necessary
+FOFHaloLinkingLength = 0.2
+FOFHaloMinLength = 32
+
+MinGasTemp = 5.0
+
+
+#----------------Neutrinos---------------------
+MNue = 0.02
+MNum = 0.02
+MNut = 0.02
+
+
+
+#  Further parameters of SPH
+#  #Only kernel supported by fake_spectra
+DensityKernelType = cubic
+InitGasTemp = 270.
+MinGasTemp = 100
+
+# Remove He bubbles:
+QSOLightupOn=0 # Turn off if box size < 60 cMpc/h
+
+#----------------------BH Stuff-------------------------
+BlackHoleKineticOn = 1 # switch to kinetic feedback mode when the BH accretion rate is low
+
+BlackHoleFeedbackFactor = 0.05
+BlackHoleFeedbackMethod = spline | mass
+SeedBlackHoleMass = 5.0e-5
+BlackHoleAccretionFactor = 100.0
+BlackHoleNgbFactor = 2.0
+BlackHoleEddingtonFactor = 3.0
+
+MinFoFMassForNewSeed = 1
+TimeBetweenSeedingSearch = 1.03
+WriteBlackHoleDetails = 1
+
+#---------------------Wind-Stuff---------------
+WindModel = ofjt10 #,isotropic
+WindEfficiency = 2.0 # Default
+WindEnergyFraction = 1.0 # Default
+WindSigma0 = 353.0 #km/s Default
+WindSpeedFactor = 3.7 # Default
+
+WindFreeTravelLength = 20 # Default 
+WindFreeTravelDensFac = 0.1 # Not Default!
+
